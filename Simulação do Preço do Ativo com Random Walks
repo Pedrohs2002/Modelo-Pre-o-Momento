@@ -1,0 +1,32 @@
+## Apple
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Parâmetros da simulação
+np.random.seed(42)  # Para garantir que a simulação seja reproduzível
+n_days = 200  # Número de dias simulados
+initial_price = 100  # Preço inicial do ativo
+sigma = 1  # Desvio padrão (volatilidade)
+mu = 0  # Expectativa do passo aleatório (sem tendência determinística)
+
+# Gerar os passos aleatórios (mudanças de preço)
+price_changes = np.random.normal(mu, sigma, n_days)  # Passos aleatórios
+
+# Simular o caminho dos preços
+prices = np.cumsum(price_changes) + initial_price  # Cumsum para obter o preço cumulativo
+
+# 4. Plotar o resultado
+plt.figure(figsize=(14, 8))
+
+# Plotando os preços simulados
+plt.plot(prices, label='Preço Simulado (Random Walk)', color='blue')
+
+# Detalhes do gráfico
+plt.title('Simulação de Preço de Ativo com Random Walk')
+plt.xlabel('Dias')
+plt.ylabel('Preço')
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
