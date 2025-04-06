@@ -1,0 +1,43 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# 1. Gerar dados fictícios de preços (simulação)
+np.random.seed(42)  # Para garantir que a simulação seja reproduzível
+n_days = 200  # Número de dias simulados
+prices = np.cumsum(np.random.normal(0, 1, n_days)) + 100  # Simulação de preços com movimento aleatório
+
+# 2. Calcular o Preço-Momento
+momentum_period = 4  # Período do momentum (ex: 10 dias)
+momentum = prices[momentum_period:] - prices[:-momentum_period]
+
+# 3. Previsão baseada no momentum
+# Regra simples: Se o momentum é positivo, prevê-se que o próximo preço subirá; se for negativo, prevê-se que cairá
+predictions = []
+for i in range(momentum_period, len(prices)):
+    if momentum[i - momentum_period] > 0:
+        # Se o momentum é positivo, prever que o próximo preço subirá
+        predictions.append(prices[i-1] + abs(momentum[i - momentum_period]))
+    else:
+        # Se o momentum é negativo, prever que o próximo preço cairá
+        predictions.append(prices[i-1] - abs(momentum[i - momentum_period]))
+
+# Ajustar o array para que os dias estejam sincronizados
+predictions = [None] * momentum_period + predictions
+
+# 4. Plotar os resultados
+plt.figure(figsize=(14, 8))
+
+# Plotando o preço real
+plt.plot(prices, label='Preços Reais', color='blue')
+
+# Plotando as previsões baseadas no momentum
+plt.plot(predictions, label='Previsões Baseadas no Momentum', color='red', linestyle='--')
+
+# Detalhes do gráfico
+plt.title('Previsões Baseadas no Preço-Momento')
+plt.xlabel('Dias')
+plt.ylabel('Preço')
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
